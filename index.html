@@ -3,27 +3,295 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coração que Fala Te Amo</title>
-      <link rel="stylesheet" href="style.css" />
+    <title>Um coração para você</title>
+    <meta name="description" content="Uma página romântica com um coração pulsante. Clique e descubra 'eu te amo' em doze idiomas." />
+  <meta property="og:title" content="Eu te amo — Um coração para você" />
+  <meta property="og:description" content="Clique no coração e veja 'eu te amo' em doze idiomas." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&display=swap" />
+  <style>
+    :root{
+        --romance-bg: oklch(0.13 0.035 12);
+        --romance-bg-deep: oklch(0.08 0.02 10);
+        --romance-rose: oklch(0.68 0.21 18);
+        --romance-pink: oklch(0.79 0.16 5);
+        --romance-blush: oklch(0.93 0.05 10);
+        --romance-ink: oklch(0.97 0.01 20);
+        --romance-shadow: 0 0 60px oklch(0.68 0.21 18 / 0.55);
+        --font-romance: "Cormorant Garamond", Georgia, serif;
+    }
+    * { box-sizing: border-box;}
+    body {margin: 0; }
+
+    .romance {
+        position: relative;
+      min-height: 100svh;
+      width: 100%;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 42%, oklch(0.24 0.09 14 / 0.9), transparent 60%),
+        linear-gradient(160deg, var(--romance-bg), var(--romance-bg-deep));
+      color: var(--romance-ink);
+      font-family: var(--font-romance);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.25rem;
+    }
+    .romance-glow {
+     position: absolute;
+     inset: -20%;
+     background: radial-gradient(circle at 50% 45%, oklch(0.68 0.21 18 / 0.22), transparent 55%);
+     animation: romance-breathe 7s ease-in-out infinite;
+     pointer-events: none;
+    }
+    .romance-particles { position: absolute; inset: 0; pointer-events: none; }
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--romance-blush);
+      opacity: 0;
+      box-shadow: 0 0 10px var(--romance-pink);
+      animation: romance-float 11s linear infinite;
+    }
+    .particle-1  { left: 5%;  bottom: -5%; animation-delay: 0s;    }
+    .particle-2  { left: 12%; bottom: -8%; animation-delay: 1.2s;  transform: scale(0.7); }
+    .particle-3  { left: 19%; bottom: -3%; animation-delay: 2.4s;  }
+    .particle-4  { left: 26%; bottom: -6%; animation-delay: 3.6s;  transform: scale(1.3); }
+    .particle-5  { left: 33%; bottom: -9%; animation-delay: 4.8s;  }
+    .particle-6  { left: 40%; bottom: -4%; animation-delay: 6s;    transform: scale(0.6); }
+    .particle-7  { left: 47%; bottom: -7%; animation-delay: 0.6s;  }
+    .particle-8  { left: 54%; bottom: -2%; animation-delay: 1.8s;  transform: scale(1.1); }
+    .particle-9  { left: 61%; bottom: -8%; animation-delay: 3s;    }
+    .particle-10 { left: 68%; bottom: -5%; animation-delay: 4.2s;  transform: scale(0.8); }
+    .particle-11 { left: 75%; bottom: -3%; animation-delay: 5.4s;  }
+    .particle-12 { left: 82%; bottom: -7%; animation-delay: 6.6s;  transform: scale(1.2); }
+    .particle-13 { left: 89%; bottom: -4%; animation-delay: 7.8s;  }
+    .particle-14 { left: 95%; bottom: -6%; animation-delay: 2s;    transform: scale(0.7); }
+    .particle-15 { left: 8%;  bottom: -2%; animation-delay: 8.4s;  }
+    .particle-16 { left: 30%; bottom: -5%; animation-delay: 9s;    transform: scale(0.9); }
+    .particle-17 { left: 58%; bottom: -9%; animation-delay: 9.6s;  }
+    .particle-18 { left: 86%; bottom: -2%; animation-delay: 10.2s; transform: scale(1.4); }
+
+    .romance-stage {
+     position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 44rem;
+      min-height: 42rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;   
+    }
+
+     .heart-toggle { position: absolute; opacity: 0; width: 0; height: 0; }
+
+    .heart-label {
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      height: 12rem;
+      width: 12rem;
+      transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .heart-label:focus-visible { outline: 2px solid var(--romance-pink); outline-offset: 8px; border-radius: 50%; }
+
+    .heart {
+      position: relative;
+      width: 7rem;
+      height: 7rem;
+      background: var(--romance-rose);
+      transform: rotate(-45deg);
+      border-radius: 0 0 0.6rem 0;
+      box-shadow: var(--romance-shadow);
+      animation: romance-beat 1.6s ease-in-out infinite;
+    }
+     .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: inherit;
+      box-shadow: var(--romance-shadow);
+    }
+    .heart::before { top: -50%; left: 0; }
+    .heart::after  { top: 0; left: 50%; }
+
+    .romance-hint {
+      margin-top: 2.5rem;
+      font-size: 1.1rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--romance-blush);
+      text-shadow: 0 0 18px oklch(0.68 0.21 18 / 0.8);
+      animation: romance-pulse-text 3s ease-in-out infinite;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+       .romance-phrases {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .phrase {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      opacity: 0;
+      text-align: center;
+      white-space: nowrap;
+      transform: translate(-50%, -50%) scale(0.8);
+      text-shadow: 0 0 20px oklch(0.68 0.21 18 / 0.7);
+    }
+    .phrase-text { display: block; font-size: 1.35rem; color: var(--romance-ink); }
+    .phrase-lang {
+      display: block;
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: oklch(0.79 0.16 5 / 0.75);
+      font-family: ui-sans-serif, system-ui, sans-serif;
+    }
+      .heart-toggle:checked ~ .romance-stage .heart-label { transform: scale(1.18); }
+    .heart-toggle:checked ~ .romance-stage .heart { animation: romance-beat 1.1s ease-in-out infinite, romance-flare 2.6s ease-in-out infinite; }
+    .heart-toggle:checked ~ .romance-stage .romance-hint { animation: none; opacity: 0; transform: translateY(8px); }
+
+    .heart-toggle:checked ~ .romance-stage .phrase {
+      animation: romance-appear 1s ease-out forwards;
+    }
+
+    .phrase-1  { --x: 0rem;   --y: -21rem; }
+    .phrase-2  { --x: 11rem;  --y: -11rem; }
+    .phrase-3  { --x: 15rem;  --y: -3rem;  }
+    .phrase-4  { --x: 13rem;  --y: 5rem;   }
+    .phrase-5  { --x: 8rem;   --y: 12rem;  }
+    .phrase-6  { --x: 0rem;   --y: 16rem;  }
+    .phrase-7  { --x: -8rem;  --y: 12rem;  }
+    .phrase-8  { --x: -13rem; --y: 5rem;   }
+    .phrase-9  { --x: -15rem; --y: -3rem;  }
+    .phrase-10 { --x: -11rem; --y: -11rem; }
+    .phrase-11 { --x: -6rem;  --y: -17rem; }
+    .phrase-12 { --x: 6rem;   --y: -17rem; }
+
+    .heart-toggle:checked ~ .romance-stage .phrase-1  { animation-delay: 0.2s; }
+    .heart-toggle:checked ~ .romance-stage .phrase-2  { animation-delay: 0.35s; }
+    .heart-toggle:checked ~ .romance-stage .phrase-3  { animation-delay: 0.5s; }
+    .heart-toggle:checked ~ .romance-stage .phrase-4  { animation-delay: 0.65s; }
+    .heart-toggle:checked ~ .romance-stage .phrase-5  { animation-delay: 0.8s; }
+    .heart-toggle:checked ~ .romance-stage .phrase-6  { animation-delay: 0.95s; }
+    .heart-toggle:checked ~ .romance-stage .phrase-7  { animation-delay: 1.1s; }
+    .heart-toggle:checked ~ .romance-stage .phrase-8  { animation-delay: 1.25s; }
+    .heart-toggle:checked ~ .romance-stage .phrase-9  { animation-delay: 1.4s; }
+    .heart-toggle:checked ~ .romance-stage .phrase-10 { animation-delay: 1.55s; }
+    .heart-toggle:checked ~ .romance-stage .phrase-11 { animation-delay: 1.7s; }
+    .heart-toggle:checked ~ .romance-stage .phrase-12 { animation-delay: 1.85s; }
+
+    @keyframes romance-appear {
+      from { opacity: 0; transform: translate(calc(-50% + var(--x) * 0.6), calc(-50% + var(--y) * 0.6)) scale(0.7); }
+      to   { opacity: 1; transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1); }
+    }
+    @keyframes romance-beat {
+      0%, 100% { transform: rotate(-45deg) scale(1); }
+      25%      { transform: rotate(-45deg) scale(1.1); }
+      40%      { transform: rotate(-45deg) scale(0.98); }
+      60%      { transform: rotate(-45deg) scale(1.06); }
+    }
+    @keyframes romance-flare {
+      0%, 100% { filter: brightness(1) saturate(1); }
+      50%      { filter: brightness(1.35) saturate(1.2); }
+    }
+    @keyframes romance-breathe {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50%      { opacity: 1;   transform: scale(1.06); }
+    }
+    @keyframes romance-pulse-text {
+      0%, 100% { opacity: 0.65; }
+      50%      { opacity: 1; }
+    }
+    @keyframes romance-float {
+      0%   { opacity: 0; }
+      10%  { opacity: 0.9; }
+      90%  { opacity: 0.5; }
+      100% { transform: translateY(-110svh) translateX(3rem); opacity: 0; }
+    }
+       @media (max-width: 640px) {
+      .heart-label { height: 9rem; width: 9rem; }
+      .heart { width: 5rem; height: 5rem; }
+      .phrase-text { font-size: 1rem; }
+      .phrase-1  { --x: 0rem;    --y: -11rem; }
+      .phrase-2  { --x: 6.5rem;  --y: -8rem;  }
+      .phrase-3  { --x: 8rem;    --y: -2rem;  }
+      .phrase-4  { --x: 7rem;    --y: 4rem;   }
+      .phrase-5  { --x: 5rem;    --y: 9rem;   }
+      .phrase-6  { --x: 0rem;    --y: 12.5rem;}
+      .phrase-7  { --x: -5rem;   --y: 9rem;   }
+      .phrase-8  { --x: -7rem;   --y: 4rem;   }
+      .phrase-9  { --x: -8rem;   --y: -2rem;  }
+      .phrase-10 { --x: -6.5rem; --y: -8rem;  }
+      .phrase-11 { --x: -4rem;   --y: -13rem; }
+      .phrase-12 { --x: 4rem;    --y: -13rem; }
+    }
+  </style>
 </head>
 <body>
-    <div class="Love-stage">
-        <div id="bg-hearts"></div>
-        <header>
-            <h1 class="title-glow">Te amo</h1>
-            <p>clique no coração e veja a magica!</p>
-        </header>
+  <div class="romance">
+    <div class="romance-glow" aria-hidden="true"></div>
+    <div class="romance-particles" aria-hidden="true">
+      <span class="particle particle-1"></span>
+      <span class="particle particle-2"></span>
+      <span class="particle particle-3"></span>
+      <span class="particle particle-4"></span>
+      <span class="particle particle-5"></span>
+      <span class="particle particle-6"></span>
+      <span class="particle particle-7"></span>
+      <span class="particle particle-8"></span>
+      <span class="particle particle-9"></span>
+      <span class="particle particle-10"></span>
+      <span class="particle particle-11"></span>
+      <span class="particle particle-12"></span>
+      <span class="particle particle-13"></span>
+      <span class="particle particle-14"></span>
+      <span class="particle particle-15"></span>
+      <span class="particle particle-16"></span>
+      <span class="particle particle-17"></span>
+      <span class="particle particle-18"></span>
+    </div>
 
-        <div class="heart-area" id="heartArea">
-            <div class="heart-wrap" id="heart" role="button" tabindex="0" aria-label="Clique para espalhar">
-                <span class="heart-glow-ring"></span>
-                <svp width="180" height="180" viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <radialGradient id="heartFill" cx="35%" cy="30%" r="80%">
-                            <stop offset="0%" stop-color="#f7a89a"/>
-                            <stop offset="55%" stop-color=""
-                        </radialGradient>
-                    </defs>
-        </div>
+    <input type="checkbox" id="heart-toggle" class="heart-toggle" />
+
+    <main class="romance-stage">
+      <label for="heart-toggle" class="heart-label" aria-label="Clique no coração">
+        <span class="heart"></span>
+      </label>
+
+      <p class="romance-hint">Clique no coração ❤️</p>
+
+      <ul class="romance-phrases">
+        <li class="phrase phrase-1"><span class="phrase-text">Eu te amo</span><span class="phrase-lang">Português</span></li>
+        <li class="phrase phrase-2"><span class="phrase-text">I love you</span><span class="phrase-lang">Inglês</span></li>
+        <li class="phrase phrase-3"><span class="phrase-text">Te amo</span><span class="phrase-lang">Espanhol</span></li>
+        <li class="phrase phrase-4"><span class="phrase-text">Je t'aime</span><span class="phrase-lang">Francês</span></li>
+        <li class="phrase phrase-5"><span class="phrase-text">Ti amo</span><span class="phrase-lang">Italiano</span></li>
+        <li class="phrase phrase-6"><span class="phrase-text">Ich liebe dich</span><span class="phrase-lang">Alemão</span></li>
+        <li class="phrase phrase-7"><span class="phrase-text">愛してる</span><span class="phrase-lang">Japonês</span></li>
+        <li class="phrase phrase-8"><span class="phrase-text">사랑해</span><span class="phrase-lang">Coreano</span></li>
+        <li class="phrase phrase-9"><span class="phrase-text">我爱你</span><span class="phrase-lang">Chinês</span></li>
+        <li class="phrase phrase-10"><span class="phrase-text">Я тебя люблю</span><span class="phrase-lang">Russo</span></li>
+        <li class="phrase phrase-11"><span class="phrase-text">أحبك</span><span class="phrase-lang">Árabe</span></li>
+        <li class="phrase phrase-12"><span class="phrase-text">Σ' αγαπώ</span><span class="phrase-lang">Grego</span></li>
+      </ul>
+    </main>
+</head>
+<body>
 </body>
 </html>
